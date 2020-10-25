@@ -4,5 +4,5 @@ class Production:
 class Development(Production):
     pass
 
-class Tessting(Production):
+class Testing(Production):
     pass
