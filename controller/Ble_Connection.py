@@ -2,6 +2,7 @@ import pygatt
 import time
 #import binascii
 from binascii import hexlify
+Ble_Mac = "EE:FD:F4:4E:9D:FB"
 
 adapter = pygatt.GATTToolBackend()
 
@@ -11,15 +12,27 @@ def handle_data(handle, value):
     value -- bytearray, the data returned in the notification
     """
     print("Received data: %s" % hexlify(value))
+    print(value)
 
 try:
     adapter.start()
-    device = adapter.connect('EE:FD:F4:4E:9D:FB', address_type=pygatt.BLEAddressType.random)
+    try:
+        device = adapter.connect(Ble_Mac,address_type=pygatt.BLEAddressType.random, timeout=20)
+    except:
+        print("Couldn't connect to the device, retrying...")
+        device = adapter.connect(Ble_Mac,address_type=pygatt.BLEAddressType.random, timeout=20)
+    print("Pairing with the device...")
+    print("Connected with the device.")
     time.sleep(2)
-    print ("subscribing")
-    #for uuid in device.discover_characteristics().keys():
-        #print("Read UUID %s: %s" % (uuid, binascii.hexlify(device.char_read(uuid))))
-    device.subscribe("6e400001-b5a3-f393-e0a9-e50e24dcca9e", callback=handle_data, indication=True)
+    try:
+        device.subscribe("6e400003-b5a3-f393-e0a9-e50e24dcca9e", callback=handle_data)
+    except Exception as e:
+        try:
+            device.subscribe("6e400003-b5a3-f393-e0a9-e50e24dcca9e", callback=handle_data)
+        except:
+            pass
+
+    input("Press Enter to continue...\n")
 
 
 finally:
