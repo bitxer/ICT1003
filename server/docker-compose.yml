@@ -23,9 +23,9 @@ services:
     environment:
       - UPLOAD_FOLDER=/opt/web/uploads
       - LOG_FOLDER=/opt/web/logs
-      - REVERSEPROXY=${REVERSEPROXY}
-      - SECURE=${SECURE}
-      - TZ=${TZ}
+      - REVERSEPROXY=no
+      - SECURE=no
+      - TZ=Asia/Singapore
     working_dir: /opt/web/app
     volumes:
       - ./APPDATA/docker-${WEB_NAME}/logs:/opt/web/logs:rw
@@ -41,7 +41,8 @@ services:
     build:
       context: telegram
       dockerfile: Dockerfile
-    networks: backend
+    networks: 
+      - backend
 
   rabbit:
     image: rabbitmq:3.8-management-alpine
