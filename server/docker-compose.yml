@@ -1,0 +1,75 @@
+version: "3.8"
+
+services:
+  httplistener:
+    build:
+      context: web
+      dockerfile: Dockerfile
+    restart: always
+    privileged: false
+    cap_drop:
+      - AUDIT_WRITE
+      - CHOWN
+      - DAC_OVERRIDE
+      - FSETID
+      - KILL
+      - NET_BIND_SERVICE
+      - NET_RAW
+      - SETGID
+      - SETUID
+      - SYS_CHROOT
+    ports:
+      - "5000:5000"
+    environment:
+      - UPLOAD_FOLDER=/opt/web/uploads
+      - LOG_FOLDER=/opt/web/logs
+      - REVERSEPROXY=${REVERSEPROXY}
+      - SECURE=${SECURE}
+      - TZ=${TZ}
+    working_dir: /opt/web/app
+    volumes:
+      - ./APPDATA/docker-${WEB_NAME}/logs:/opt/web/logs:rw
+      - ./APPDATA/docker-${WEB_NAME}/uploads:/opt/web/uploads:rw
+    depends_on:
+      rabbit:
+        condition: service_healthy
+    networks:
+      - frontend
+      - backend
+
+  telegram:
+    build:
+      context: telegram
+      dockerfile: Dockerfile
+    networks: backend
+
+  rabbit:
+    image: rabbitmq:3.8-management-alpine
+    restart: always
+    privileged: false
+    cap_drop:
+      - AUDIT_WRITE
+      - DAC_OVERRIDE
+      - KILL
+      - NET_BIND_SERVICE
+      - NET_RAW
+      - SYS_CHROOT
+    environment:
+      - RABBITMQ_DEFAULT_USER=guest
+      - RABBITMQ_DEFAULT_PASS=guest
+    volumes:
+      - ./APPDATA/docker-${WEB_NAME}/uploads:/opt/app/uploads:ro
+    healthcheck:
+      test: [ "CMD", "nc", "-z", "localhost", "5672" ]
+      interval: 3s
+      timeout: 10s
+      retries: 3
+    networks:
+      - backend
+
+networks:
+  frontend:
+    driver: bridge
+  backend:
+    driver: bridge
+    internal: true
