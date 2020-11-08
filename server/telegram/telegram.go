@@ -4,6 +4,7 @@ import (
 	"encoding/json"
 	"log"
 	"os"
+	"path"
 
 	tgbotapi "github.com/go-telegram-bot-api/telegram-bot-api"
 	"github.com/streadway/amqp"
@@ -16,6 +17,10 @@ type Configuration struct {
 	Testing       bool
 	ChannelID     int64
 	TelegramToken string
+	RabbitUser    string
+	RabbitPass    string
+	RabbitHost    string
+	UploadDir     string
 }
 
 // Detection struct used to load detection info from rabbitmq
@@ -43,7 +48,8 @@ func main() {
 	log.Println("Environment:", Config.Env)
 
 	// Setup RabbitMQ
-	conn, err := amqp.Dial("amqp://guest:guest@localhost:5672/")
+	rabbitURL := "amqp://" + Config.RabbitUser + ":" + Config.RabbitPass + "@" + Config.RabbitHost + ":5672/"
+	conn, err := amqp.Dial(rabbitURL)
 	failOnError(err, "Failed to connect to RabbitMQ")
 	defer conn.Close()
 
@@ -94,10 +100,11 @@ func main() {
 		for d := range msgs {
 			var detection Detection
 			data := d.Body
-			log.Printf("Received a message: %s", string(data))
 			json.Unmarshal(data, &detection)
-			log.Printf("Received a message: %s", detection.Image)
-			msg := tgbotapi.NewPhotoUpload(Config.ChannelID, detection.Image)
+			log.Printf("Received a message: %s", string(data))
+			imagePath := path.Join(Config.UploadDir, detection.Image)
+			log.Printf("Image File: %s", imagePath)
+			msg := tgbotapi.NewPhotoUpload(Config.ChannelID, imagePath)
 			msg.Caption = "[" + detection.Time + "] New Detection at Sensor " + detection.Sensor
 			bot.Send(msg)
 			d.Ack(false)

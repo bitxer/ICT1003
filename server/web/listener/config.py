@@ -7,7 +7,7 @@ class Production:
     CONFIG_KEY = "PRODUCTION"
 
     UPLOAD_FOLDER = os.environ.get('UPLOAD_FOLDER') if os.environ.get('UPLOAD_FOLDER') != 'default' else  'APPDATA/uploads'
-    RABBIT_HOST = os.environ.get('RABBIT_HOST') or 'rabbitmq'
+    RABBIT_HOST = os.environ.get('RABBIT_HOST') or 'rabbit'
     RABBIT_USER = os.environ.get('RABBIT_USER') or 'guest'
     RABBIT_PASS = os.environ.get('RABBIT_PASS') or 'guest'
     RABBIT_URL = ConnectionParameters(host=RABBIT_HOST, credentials=PlainCredentials(RABBIT_USER, RABBIT_PASS))

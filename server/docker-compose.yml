@@ -26,25 +26,29 @@ services:
       - REVERSEPROXY=no
       - SECURE=no
       - TZ=Asia/Singapore
-    working_dir: /opt/web/app
+    working_dir: /opt/web
     volumes:
-      - ./APPDATA/docker-${WEB_NAME}/logs:/opt/web/logs:rw
-      - ./APPDATA/docker-${WEB_NAME}/uploads:/opt/web/uploads:rw
+      - ./APPDATA/docker-${APP_NAME}/logs:/opt/web/logs:rw
+      - ./APPDATA/docker-${APP_NAME}/uploads:/opt/web/uploads:rw
     depends_on:
       rabbit:
         condition: service_healthy
     networks:
-      - frontend
-      - backend
+      - external_net
+      - internal_net
 
   telegram:
     build:
       context: telegram
       dockerfile: Dockerfile
     volumes:
-      - ./APPDATA/docker-${WEB_NAME}/uploads:/opt/telegram/uploads:ro
-    networks: 
-      - backend
+      - ./APPDATA/docker-${APP_NAME}/uploads:/opt/telegram/uploads:ro
+    depends_on:
+      rabbit:
+        condition: service_healthy
+    networks:
+      - external_net
+      - internal_net
 
   rabbit:
     image: rabbitmq:3.8-management-alpine
@@ -66,11 +70,11 @@ services:
       timeout: 10s
       retries: 3
     networks:
-      - backend
+      - internal_net
 
 networks:
-  frontend:
+  external_net:
     driver: bridge
-  backend:
+  internal_net:
     driver: bridge
     internal: true

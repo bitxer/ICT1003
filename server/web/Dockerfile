@@ -1,14 +1,18 @@
 FROM python:3.9-alpine
 
-RUN mkdir -p /opt/web/logs /opt/web/uploads
-WORKDIR /opt/web/app
+RUN rm -rf /var/cache/apk/* /tmp/* && \
+    apk update && apk upgrade && \
+    apk add python3-dev libffi-dev gcc musl-dev make libmagic --no-cache
 
-COPY ./web/ /opt/web/listener/
-COPY ./docker-entrypoint.sh /opt/gctf/listener/docker-entrypoint.sh
-COPY ./requirements.txt /opt/web/listener   /requirements.txt
+RUN mkdir -p /opt/web/logs /opt/web/uploads /opt/web/listener
+WORKDIR /opt/web
 
-RUN chmod +x /opt/web/listener/docker-entrypoint.sh
+COPY ./listener/ /opt/web/listener
+COPY ./docker-entrypoint.sh /opt/web/docker-entrypoint.sh
+COPY ./requirements.txt /opt/web/requirements.txt
+
 RUN pip install --upgrade pip && \
-    pip install -r /opt/web/listener/requirements.txt
+    pip install -r /opt/web/requirements.txt
 
-ENTRYPOINT ["/opt/web/app/docker-entrypoint.sh"]
+RUN chmod +x /opt/web/docker-entrypoint.sh
+ENTRYPOINT ["/opt/web/docker-entrypoint.sh"]

@@ -1,6 +1,6 @@
-from app import init_app
+from listener import init_app
 
-app = init_app(config="app.config.Development")
+app = init_app(config="listener.config.Development")
 
 if app:
     try:

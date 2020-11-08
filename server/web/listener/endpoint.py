@@ -24,16 +24,16 @@ def detection():
     if not f_type.startswith('image'):
         return 'Bad image', 400
     
-    fname = md5(image.read()).hexdigest()
-    fname = os.path.join(app.config['UPLOAD_FOLDER'], fname)
-    with open(fname, 'wb') as f:
+    f_hash = md5(image.read()).hexdigest()
+    f_path = os.path.join(app.config['UPLOAD_FOLDER'], f_hash)
+    with open(f_path, 'wb') as f:
         f.write(f_content)
 
     conn = pika.BlockingConnection(app.config.get('RABBIT_URL'))
     channel = conn.channel()
     channel.queue_declare(queue='alert', durable=True)
     body = {
-        "image": fname,
+        "image": f_hash,
         "sensor": sensor,
         "time": dtime
     }
