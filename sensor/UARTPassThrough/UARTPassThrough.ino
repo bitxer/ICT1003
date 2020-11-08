@@ -10,7 +10,7 @@
 //  'aci_loop' and 'BLEsetup' functions to allow easy replacement. 
 //
 //  Written by Ben Rose, TinyCircuits http://tinycircuits.com
-//
+//  ******Comment need to change******
 //-------------------------------------------------------------------------------
 
 
@@ -37,7 +37,7 @@ uint8_t ble_connection_state = false;
 void setup() {
   Serial.begin(9600);
   SerialMonitorInterface.begin(9600);
-  while (!SerialMonitorInterface); //This line will block until a serial monitor is opened with TinyScreen+!
+  //while (!SerialMonitorInterface); //This line will block until a serial monitor is opened with TinyScreen+!
   BLEsetup();
 }
 
