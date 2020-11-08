@@ -4,9 +4,9 @@ from hashlib import md5
 
 import pika, os, json
 
-endpoints = Blueprint("endpoints", __name__)
+sensors = Blueprint("sensors", __name__)
 
-@endpoints.route('/detection', methods=['POST'])
+@sensors.route('/detection', methods=['POST'])
 def detection():
     apikey = request.headers.get('X-APIKEY')
     if apikey is None:

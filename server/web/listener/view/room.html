@@ -1,0 +1,12 @@
+{% extends "base.html" %}
+
+{% block content %}
+<form method="POST" action="/room">
+    <div class="form-group">
+      <label for="roomName">Room Name</label>
+      <input type="text" class="form-control" id="roomName" placeholder="Room Name">
+    </div>
+    <input type="hidden" class="hidden" name="token" id="token" value="{{ session.get('csrf_token') }}" readonly required>
+    <button type="submit" class="btn btn-primary">Submit</button>
+  </form>
+{% endblock %}
