@@ -1,5 +1,6 @@
 from flask import current_app as app, Blueprint, request, render_template
 from secrets import token_urlsafe
+from listener.model.room import Room
 
 admin = Blueprint("admin", __name__)
 
@@ -8,7 +9,10 @@ def door():
     if request.method == 'GET':
         return render_template('room.html')
     else:
+        name = request.form.get('name')
         apikey = token_urlsafe(app.config['KEY_LENGTH'])
+        room = Room(name, apikey)
+        room.add()
         return render_template('result.html', message="Room added successfully", key=apikey)
 
 @admin.route('/booking', methods=['GET', 'POST'])
