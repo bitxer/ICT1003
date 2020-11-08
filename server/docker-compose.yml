@@ -41,6 +41,8 @@ services:
     build:
       context: telegram
       dockerfile: Dockerfile
+    volumes:
+      - ./APPDATA/docker-${WEB_NAME}/uploads:/opt/telegram/uploads:ro
     networks: 
       - backend
 
@@ -58,8 +60,6 @@ services:
     environment:
       - RABBITMQ_DEFAULT_USER=guest
       - RABBITMQ_DEFAULT_PASS=guest
-    volumes:
-      - ./APPDATA/docker-${WEB_NAME}/uploads:/opt/app/uploads:ro
     healthcheck:
       test: [ "CMD", "nc", "-z", "localhost", "5672" ]
       interval: 3s

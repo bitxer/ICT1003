@@ -128,6 +128,7 @@ dmypy.json
 # Pyre type checker
 .pyre/
 APPDATA/
+config.json
 
 # CCS exclude directories and files for msp430f5529 are included below
 Binaries/
