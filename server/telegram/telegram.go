@@ -9,6 +9,7 @@ import (
 	"github.com/streadway/amqp"
 )
 
+// Configuration struct used to load configuration from config file
 type Configuration struct {
 	Env           string
 	Debug         bool
@@ -17,6 +18,7 @@ type Configuration struct {
 	TelegramToken string
 }
 
+// Detection struct used to load detection info from rabbitmq
 type Detection struct {
 	Image  string
 	Sensor string
