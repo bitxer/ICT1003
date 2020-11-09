@@ -6,8 +6,8 @@
         <label for="room">Room</label>
         <select class="custom-select" id="room">
             <option selected>Select a room to book</option>
-            {% for id in rooms %}
-            <option value="{{ id }}">{{ rooms[id] }}</option>
+            {% for room in rooms %}
+            <option value="{{ room.uuid }}">{{ room.name }}</option>
             {% endfor %}
         </select>
     </div>
