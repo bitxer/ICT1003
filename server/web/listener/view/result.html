@@ -1,0 +1,8 @@
+{% extends "base.html" %}
+
+{% block content %}
+{{ message }}<br>
+{% if key is not undefined %}
+key: {{ key }}
+{% endif %}
+{% endblock %}

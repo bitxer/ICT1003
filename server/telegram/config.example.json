@@ -1,0 +1,11 @@
+{
+    "Env": "production",
+    "Debug": false,
+    "Testing": false,
+    "ChannelID" : -100XXXXXXXXXX,
+    "TelegramToken": "XXXXXXXXXXXXXXX",
+	"RabbitUser": "guest",
+	"RabbitPass": "guest",
+	"RabbitHost": "rabbit",
+    "UploadDir": "/opt/telegram/uploads"
+}
