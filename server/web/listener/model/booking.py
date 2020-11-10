@@ -5,8 +5,8 @@ from listener.model.globals import db
 
 class Booking(db.Model):
     __tablename__ = "booking"
-    uuid = db.Column(db.String(32), primary_key=True)
-    room_uuid = db.Column(db.String(32), db.ForeignKey("room.uuid"), nullable=False)
+    uuid = db.Column(db.Text, primary_key=True)
+    room_uuid = db.Column(db.Text, db.ForeignKey("room.uuid"), nullable=False)
     start_time = db.Column(db.Integer)
     end_time = db.Column(db.Integer)
 

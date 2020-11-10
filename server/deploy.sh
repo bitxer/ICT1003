@@ -78,7 +78,7 @@ if [[ -z "${IGNORE_CLEAN_DIR}" ]]; then
             case "${DELETE_OLD_IN}" in
                 [Y])
                 # Remove old data.
-                rm -rf ./APPDATA/docker-${APP_NAME}
+                sudo rm -rf ./APPDATA/docker-${APP_NAME}
                 break
                 ;;
                 [y])

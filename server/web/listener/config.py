@@ -9,8 +9,7 @@ class Production:
     KEY_LENGTH = 48
     UPLOAD_FOLDER = os.environ.get('UPLOAD_FOLDER') if os.environ.get('UPLOAD_FOLDER') != 'default' else  'APPDATA/uploads'
 
-    # SQLALCHEMY_DATABASE_URI = os.environ.get("DATABASE_URL")
-    SQLALCHEMY_DATABASE_URI = os.environ.get("DEV_DATABASE_URL") or "sqlite://"
+    SQLALCHEMY_DATABASE_URI = os.environ.get("DATABASE_URL")
     SQLALCHEMY_TRACK_MODIFICATIONS = False
 
     RABBIT_HOST = os.environ.get('RABBIT_HOST') or 'rabbit'

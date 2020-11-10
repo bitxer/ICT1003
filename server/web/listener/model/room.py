@@ -7,9 +7,9 @@ from listener.model.globals import db
 
 class Room(db.Model):
     __tablename__ = "room"
-    uuid = db.Column(db.String(32), primary_key=True)
-    apikey = db.Column(db.String(app.config['KEY_LENGTH']), unique=True)
-    name = db.Column(db.String(100), unique=True)
+    uuid = db.Column(db.Text, primary_key=True)
+    apikey = db.Column(db.Text, unique=True)
+    name = db.Column(db.Text, unique=True)
     bookings = db.relationship('Booking', backref='room', lazy=True)
 
     def __init__(self, name):

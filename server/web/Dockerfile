@@ -2,7 +2,7 @@ FROM python:3.9-alpine
 
 RUN rm -rf /var/cache/apk/* /tmp/* && \
     apk update && apk upgrade && \
-    apk add python3-dev libffi-dev gcc musl-dev make libmagic --no-cache
+    apk add python3-dev libffi-dev gcc musl-dev make libmagic postgresql-dev --no-cache
 
 RUN mkdir -p /opt/web/logs /opt/web/uploads /opt/web/listener
 WORKDIR /opt/web
