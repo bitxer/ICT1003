@@ -1,15 +1,16 @@
+from secrets import token_urlsafe
 from sqlalchemy.exc import IntegrityError, OperationalError, ProgrammingError
 from flask import current_app as app
-from secrets import token_urlsafe
 
 from listener.module import generate_uuid
 from listener.model.globals import db
 
 class Room(db.Model):
     __tablename__ = "room"
-    uuid = db.Column(db.String(64), primary_key=True)
+    uuid = db.Column(db.String(32), primary_key=True)
     apikey = db.Column(db.String(app.config['KEY_LENGTH']), unique=True)
     name = db.Column(db.String(100), unique=True)
+    bookings = db.relationship('Booking', backref='room', lazy=True)
 
     def __init__(self, name):
         self.uuid = str(generate_uuid())
@@ -23,7 +24,7 @@ class Room(db.Model):
             db.session.add(self)
             db.session.commit()
             return True
-        except (IntegrityError, ProgrammingError, OperationalError) as e:
+        except (IntegrityError, ProgrammingError, OperationalError):
             db.session.rollback()
             return None
         finally:
@@ -38,7 +39,7 @@ def get_room(uuid=None, apikey=None, name=None):
         elif name:
             return Room.query.filter_by(name=name).first() or False
         return Room.query.all() or False
-    except (ProgrammingError, OperationalError) as e:
+    except (ProgrammingError, OperationalError):
         return None
     finally:
         db.session.close()

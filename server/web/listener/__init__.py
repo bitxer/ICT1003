@@ -35,6 +35,7 @@ def init_app(config="listener.config.Production"):
 
         try:
             from listener.model.room import Room
+            from listener.model.booking import Booking
             db.create_all()
         except InternalError as e:
             return None
