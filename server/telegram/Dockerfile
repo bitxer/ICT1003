@@ -11,7 +11,7 @@ RUN mkdir -p /opt/telegram/uploads
 WORKDIR /opt/telegram
 
 COPY telegram.go /opt/telegram/
-COPY config.json /opt/telegram/
+COPY config.prod.json /opt/telegram/config.json
 RUN go build -o telegram
 
 ENTRYPOINT [ "./telegram" ]

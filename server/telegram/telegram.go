@@ -46,6 +46,7 @@ func main() {
 	err = decoder.Decode(&Config)
 	failOnError(err, "Can't decode config JSON")
 	log.Println("Environment:", Config.Env)
+	log.Println("Debug:", Config.Debug)
 
 	// Setup RabbitMQ
 	rabbitURL := "amqp://" + Config.RabbitUser + ":" + Config.RabbitPass + "@" + Config.RabbitHost + ":5672/"
