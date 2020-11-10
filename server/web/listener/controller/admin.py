@@ -1,8 +1,7 @@
-from datetime import datetime
-
 from flask import current_app as app, Blueprint, request, render_template
 from listener.model.room import Room, get_room
 from listener.model.booking import Booking, get_booking
+from listener.module import convert_time_to_timestamp, convert_timestamp_to_time
 
 admin = Blueprint("admin", __name__)
 
@@ -51,10 +50,9 @@ def h_get_booking(room):
         bookings = get_booking() or []
     
     result = {}
-    t_format = "%d/%m/%Y %H:%M"
     for b in bookings:
-        start = datetime.fromtimestamp(b.start_time).strftime(t_format)
-        end = datetime.fromtimestamp(b.end_time).strftime(t_format)
+        start = convert_timestamp_to_time(b.start_time)
+        end =  convert_timestamp_to_time(b.end_time)
         result[b.uuid] = {'room': b.room_uuid, 'start': start, 'end': end}
     return result
 
@@ -81,8 +79,8 @@ def h_post_booking():
     start = '{} {}'.format(date, start)
     end = '{} {}'.format(date, end)
     t_format = "%d/%m/%Y %H:%M"
-    start = datetime.strptime(start, t_format).timestamp()
-    end = datetime.strptime(end, t_format).timestamp()
+    start = convert_time_to_timestamp(start)
+    end = convert_time_to_timestamp(end)
 
     if end <= start:
         return 'End time should be later than start time', 400

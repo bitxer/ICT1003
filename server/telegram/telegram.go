@@ -25,9 +25,9 @@ type Configuration struct {
 
 // Detection struct used to load detection info from rabbitmq
 type Detection struct {
-	Image  string
-	Sensor string
-	Time   string
+	Image string
+	Room  string
+	Time  string
 }
 
 func failOnError(err error, msg string) {
@@ -105,7 +105,7 @@ func main() {
 			imagePath := path.Join(Config.UploadDir, detection.Image)
 			log.Printf("Image File: %s", imagePath)
 			msg := tgbotapi.NewPhotoUpload(Config.ChannelID, imagePath)
-			msg.Caption = "[" + detection.Time + "] New Detection at Sensor " + detection.Sensor
+			msg.Caption = "[" + detection.Time + "] New Detection in Room " + detection.Room
 			bot.Send(msg)
 			d.Ack(false)
 		}
