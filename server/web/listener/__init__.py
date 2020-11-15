@@ -51,4 +51,6 @@ def init_app(config="listener.config.Production"):
         app.register_blueprint(sensors)
         from listener.controller.admin import admin
         app.register_blueprint(admin)
+        from listener.controller.ui import ui
+        app.register_blueprint(ui)
     return app
