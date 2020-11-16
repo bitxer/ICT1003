@@ -1,0 +1,79 @@
+<!-- Create Booking Modal Start -->
+<div class="modal fade" id="createBookingModal" tabindex="-1" aria-labelledby="createBookingModalLabel"
+    aria-hidden="true">
+    <div class="modal-dialog modal-dialog-centered">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h5 class="modal-title" id="createBookingModalLabel">Create Booking</h5>
+                <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                    <span aria-hidden="true">&times;</span>
+                </button>
+                <div id="rowId" style="display: none;"></div>
+            </div>
+            <div class="modal-body">
+                <div class="container">
+                    <input type="hidden" id="uuid" name="uuid">
+
+                    <div class="row">
+                        <div class="form-group col">
+                            <label for="date" class="col-form-label">Date:</label>
+                            <input type="date" class="form-control" id="date">
+                        </div>
+                    </div>
+
+                    <div class="row">
+                        <div class="form-group col-sm-6">
+                            <label for="startTime" class="col-form-label">Start Time:</label>
+                            <input type="text" class="form-control" id="startTime" placeholder="13:30">
+                        </div>
+                        <div class="form-group col-sm-6">
+                            <label for="endTime" class="col-form-label">End Time:</label>
+                            <input type="text" class="form-control" id="endTime" placeholder="14:00">
+                        </div>
+                    </div>
+                </div>
+            </div>
+            <div class="modal-footer">
+                <button type="button" class="btn btn-secondary" data-dismiss="modal">Cancel</button>
+                <button type="button" onclick="createBooking('{{uuid}}')" class="btn btn-primary"
+                    data-dismiss="modal">Create</button>
+            </div>
+        </div>
+    </div>
+</div>
+<!-- Create Booking Modal End -->
+
+<script defer>
+    function createBooking() {
+        // Get date, start end time and room to make booking.
+        var date = new Date(document.getElementById("date").value);
+        var stringDate =
+            date.getDate() + "/" +
+            (date.getMonth() + 1) + "/" +
+            date.getFullYear();
+        var startTime = document.getElementById("startTime").value;
+        var endTime = document.getElementById("endTime").value;
+        var room = document.getElementById("uuid").value;
+
+        $.post("/booking", {
+            room: room, date: stringDate,
+            start: startTime, end: endTime
+        })
+            .done(function (msg) {
+                var alertItem = "<div class='alert alert-success alert-dismissible fade show' role='alert'>";
+                alertItem += "<strong>Booking Successful!</strong> Your booking have been saved. <div button type = 'button' class='close' data-dismiss='alert' aria-label='Close' > ";
+                alertItem += "<span aria-hidden='true'>&times;</span></div>";
+
+                var alert = $("#alert");
+                alert.append(alertItem);
+            })
+            .fail(function (xhr, status, error) {
+                var alertItem = "<div class='alert alert-danger alert-dismissible fade show' role='alert'>";
+                alertItem += "<strong>Booking Unsuccessful!</strong> Your booking have fail! Please check that your fields are correct!. <div button type = 'button' class='close' data-dismiss='alert' aria-label='Close' > ";
+                alertItem += "<span aria-hidden='true'>&times;</span></div>";
+
+                var alert = $("#alert");
+                alert.append(alertItem);
+            });
+    }
+</script>

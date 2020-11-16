@@ -1,12 +1,55 @@
 {% extends "base.html" %}
 
 {% block content %}
-<form method="POST" action="/room">
-    <div class="form-group">
-      <label for="roomName">Room Name</label>
-      <input type="text" class="form-control" id="roomName" name="name" placeholder="Room Name">
+<div class="container" style="margin-top: 20px;">
+  <!-- Header Start-->
+  <header>
+    <div id="alert"></div>
+    <div class="jumbotron">
+      <h1>Door Management System</h1>
+      <p>This systems tracks the bookings of room by people. </p>
     </div>
-    <input type="hidden" class="hidden" name="token" id="token" value="{{ session.get('csrf_token') }}" readonly required>
-    <button type="submit" class="btn btn-primary">Submit</button>
-  </form>
-{% endblock %}
+  </header>
+  <!-- Header End-->
+
+  <section style="margin-top: 15px;">
+    <div class="row">
+      <button type="button" class="btn btn-primary" data-toggle="modal" data-target="#createRoomModal">Create New
+        Room</button>
+    </div>
+  </section>
+
+  <!-- Table Start -->
+  <section style="margin-top: 15px;">
+    <div class="row" id="tableSection">
+      <table class="table">
+        <tr>
+          <th>Name</th>
+          <th>UUID</th>
+          <th>Actions</th>
+        </tr>
+        {% for uuid, name in rooms.items() %}
+        <tr>
+          <td>
+            {{name}}
+          </td>
+          <td>
+            {{uuid}}
+          </td>
+          <td>
+            <button type="button" class="btn btn-sm btn-primary" data-toggle="modal" data-target="#createBookingModal"
+              data-uuid="{{uuid}}">Book</button>
+            <button type="button" class="btn btn-sm btn-secondary" data-toggle="modal" data-target="#viewBookingsModal"
+              data-uuid="{{uuid}}">View Upcoming Bookings</button>
+          </td>
+        </tr>
+        {% endfor %}
+      </table>
+    </div>
+  </section>
+  <!-- Table End -->
+  
+  {% endblock %}
+  {% include "create_room_modal.html" %}
+  {% include "create_booking_modal.html" %}
+  {% include "view_bookings_modal.html" %}
