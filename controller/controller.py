@@ -70,7 +70,7 @@ class Data():
 
 def detect():
     camera = PiCamera()
-    now = datetime.now().timestamp()
+    now = str(int(datetime.now().timestamp()))
     filename = path.join(config.CAMERA_FOLDER, now)
     camera.capture(filename)
     # post(config.DETECTION_URL, headers={"X-APIKEY":config.ROOM_KEY})
