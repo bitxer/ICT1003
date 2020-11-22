@@ -44,6 +44,7 @@ services:
     build:
       context: telegram
       dockerfile: Dockerfile
+    restart: always
     volumes:
       - ./APPDATA/docker-${APP_NAME}/uploads:/opt/telegram/uploads:ro
     depends_on:
