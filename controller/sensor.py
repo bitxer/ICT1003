@@ -3,6 +3,7 @@ from datetime import datetime
 from requests import post
 from pygatt import BLEAddressType
 from picamera import PiCamera
+from picamera.exc import PiCameraMMALError
 
 from definitions import SYNC, OPEN, CLOSE
 from data import Data
@@ -29,10 +30,15 @@ class Sensor:
             pass
 
     def detect(self):
-        camera = PiCamera()
         now = str(int(datetime.now().timestamp()))
         filename = path.join(CAMERA_FOLDER, now) + '.jpg'
-        camera.capture(filename)
+        try:
+            camera = PiCamera()
+            camera.capture(filename)
+        except PiCameraMMALError:
+            return
+        finally:
+            camera.close()
         headers = {"X-APIKEY": ROOM_KEY}
         with open(filename, 'rb') as f:
             post(DETECTION_URL, headers=headers, data={'time': now}, files={'image': f})
