@@ -70,14 +70,15 @@ class Data():
             data = data[6:].decode()
         except AttributeError:
             return None
-        
+
         if len(data) != clen:
             return None
-            
-        cls(actref, rsp, otp, ver=ver, rev=rev, data=data)
+
+        return cls(actref, rsp, otp, ver=ver, rev=rev, data=data)
 
     def __str__(self):
-        return f"<Data ver={self.ver} ref={self.actref} rsp={self.rsp} len={self.len} otp={self.otp} data={self.data}>"
+        return f"<Data ver={self.ver} rev={self.rev} ref={self.actref} \
+            rsp={self.rsp} len={self.len} otp={self.otp} data={self.data}>"
 
 
 def detect():
