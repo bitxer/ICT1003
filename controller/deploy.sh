@@ -42,4 +42,5 @@ fi
 
 # Run program
 echo "[*] Starting Controller..."
+cd app/
 python3 controller.py
