@@ -28,7 +28,7 @@ class Sensor:
         elif data.actref == CLOSE:
             pass
         elif data.actref == SYNC:
-            self.sync()
+            self.sync(data)
 
     def detect(self):
         now = str(int(datetime.now().timestamp()))
@@ -44,10 +44,5 @@ class Sensor:
         with open(filename, 'rb') as f:
             post(DETECTION_URL, headers=headers, data={'time': now}, files={'image': f})
 
-    def send(self, data):
-        data = bytearray(data.pack())
-        self.device.char_write_long('6e400002-b5a3-f393-e0a9-e50e24dcca9e', data)
-
-    def sync(self):
-        data = Data(SYNC, 1, self.message_id, data=self.message_id)
-        self.send(data)
+    def sync(self, data):
+        self.message_id = data.msg_id
