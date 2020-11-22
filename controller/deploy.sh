@@ -7,7 +7,7 @@ echo "[+] Working in: $(pwd)"
 while getopts f:k: OPTION; do
     case "${OPTION}" in
         f)
-        export CAMERA_FOLDER="${OPTARG}"
+        export CAMERA_FOLDER=$(pwd)/"${OPTARG}"
         CAMERA_FOLDER_SET="yes"
         ;;
         k)
@@ -26,9 +26,9 @@ echo "[*] Setting up data directories..."
 if [[ -z "${CAMERA_FOLDER_SET}" ]]; then
     read -p "Camera data directory [camera] : " CAMERA_FOLDER_IN
     if [[ ! -z "${CAMERA_FOLDER_IN}" ]]; then
-        export CAMERA_FOLDER=${CAMERA_FOLDER_IN}
+        export CAMERA_FOLDER=$(pwd)/${CAMERA_FOLDER_IN}
     else
-        export CAMERA_FOLDER="camera"
+        export CAMERA_FOLDER=$(pwd)/camera
     fi
 fi
 mkdir -p $(pwd)/${CAMERA_FOLDER}
