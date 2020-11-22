@@ -3,16 +3,17 @@ from datetime import datetime
 from os import path
 
 from requests import post
-import pygatt
+from pygatt import GATTToolBackend, BLEAddressType
 from picamera import PiCamera
 
 import config
+from definitions import *
 
 class Data():
     '''Data object to be transmitted and recieved'''
     STRUCT_FORMAT = '>bbI14s'
     HEADER_FORMAT = '>bbI'
-    def __init__(self, actref, rsp, otp, ver=1, rev=1, data=None):
+    def __init__(self, actref, rsp, otp, ver=VERSION, rev=REVISION, data=None):
         try:
             self.len = len(data)
             self.data = data
@@ -77,8 +78,7 @@ class Data():
         return cls(actref, rsp, otp, ver=ver, rev=rev, data=data)
 
     def __str__(self):
-        return f"<Data ver={self.ver} rev={self.rev} ref={self.actref} \
-            rsp={self.rsp} len={self.len} otp={self.otp} data={self.data}>"
+        return f"<Data ver={self.ver} rev={self.rev} ref={self.actref} rsp={self.rsp} len={self.len} otp={self.otp} data={self.data}>"
 
 
 def detect():
@@ -98,13 +98,20 @@ def process(_, data):
     """
     data = Data.parse(data)
     print(data)
+    if data.actref == OPEN:
+        detect()
+    elif data.actref == CLOSE:
+        pass
+    elif data.actref == SYNC:
+        pass
 
 def main():
-    adapter = pygatt.GATTToolBackend()
+    adapter = GATTToolBackend()
     try:
         adapter.start()
-        device = adapter.connect('c5:2d:cc:32:65:34', address_type=pygatt.BLEAddressType.random, auto_reconnect=True)
-        device.subscribe("6e400003-b5a3-f393-e0a9-e50e24dcca9e", callback=process)
+        for mac in config.ALLOWED_MAC:
+            device = adapter.connect(mac, address_type=BLEAddressType.random, auto_reconnect=True)
+            device.subscribe("6e400003-b5a3-f393-e0a9-e50e24dcca9e", callback=process)
         input("Press enter to continue.....")
     except KeyboardInterrupt:
         pass
