@@ -12,8 +12,9 @@ from config import CAMERA_FOLDER, ROOM_KEY, DETECTION_URL
 class Sensor:
     def __init__(self,adapter, mac):
         self.mac = mac
-        device = adapter.connect(mac, address_type=BLEAddressType.random, auto_reconnect=True)
-        device.subscribe("6e400003-b5a3-f393-e0a9-e50e24dcca9e", callback=self.process)
+        self.message_id = 0
+        self.device = adapter.connect(mac, address_type=BLEAddressType.random, auto_reconnect=True)
+        self.device.subscribe("6e400003-b5a3-f393-e0a9-e50e24dcca9e", callback=self.process)
 
     def process(self, _, data):
         """
@@ -27,7 +28,7 @@ class Sensor:
         elif data.actref == CLOSE:
             pass
         elif data.actref == SYNC:
-            pass
+            self.sync()
 
     def detect(self):
         now = str(int(datetime.now().timestamp()))
@@ -42,3 +43,11 @@ class Sensor:
         headers = {"X-APIKEY": ROOM_KEY}
         with open(filename, 'rb') as f:
             post(DETECTION_URL, headers=headers, data={'time': now}, files={'image': f})
+
+    def send(self, data):
+        data = bytearray(data.pack())
+        self.device.char_write_long('6e400002-b5a3-f393-e0a9-e50e24dcca9e', data)
+
+    def sync(self):
+        data = Data(SYNC, 1, self.message_id, data=self.message_id)
+        self.send(data)

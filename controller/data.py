@@ -5,7 +5,7 @@ class Data():
     '''Data object to be transmitted and recieved'''
     STRUCT_FORMAT = '>bbI14s'
     HEADER_FORMAT = '>bbI'
-    def __init__(self, actref, rsp, otp, ver=VERSION, rev=REVISION, data=None):
+    def __init__(self, actref, rsp, msg_id, ver=VERSION, rev=REVISION, data=None):
         try:
             self.len = len(data)
             self.data = data
@@ -28,23 +28,23 @@ class Data():
         if rsp > 0x1:
             raise ValueError('Invalid RSP Field')
 
-        if otp > 0xFFFFFF:
+        if msg_id > 0xFFFFFF:
             raise ValueError('Invalid OTP Field')
 
         self.ver = ver
         self.rev = rev
         self.actref = actref
         self.rsp = rsp
-        self.otp = otp
+        self.msg_id = msg_id
 
     def pack(self):
         '''Pack the object and return a byte stream in big endian format'''
         ver_rev = (self.ver << 4) + self.rev
         rsp_len = (self.rsp << 7) + self.len
-        rsp_len_otp = (rsp_len << 24) + self.otp
+        rsp_len_msg_id = (rsp_len << 24) + self.msg_id
         if isinstance(self.data, str):
             self.data = self.data.encode()
-        return pack(self.STRUCT_FORMAT, ver_rev, self.actref, rsp_len_otp, self.data)
+        return pack(self.STRUCT_FORMAT, ver_rev, self.actref, rsp_len_msg_id, self.data)
 
     @classmethod
     def parse(cls, data):
@@ -70,4 +70,4 @@ class Data():
         return cls(actref, rsp, otp, ver=ver, rev=rev, data=data)
 
     def __str__(self):
-        return f"<Data ver={self.ver} rev={self.rev} ref={self.actref} rsp={self.rsp} len={self.len} otp={self.otp} data={self.data}>"
+        return f"<Data ver={self.ver} rev={self.rev} ref={self.actref} rsp={self.rsp} len={self.len} msg_id={self.msg_id} data={self.data}>"
