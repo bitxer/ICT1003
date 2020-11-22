@@ -22,6 +22,8 @@ class Sensor:
         data -- bytearray, the data returned in the notification
         """
         data = Data.parse(data)
+        if data.msg_id != self.message_id:
+            return
         print(data)
         if data.actref == OPEN:
             self.detect()
@@ -43,6 +45,9 @@ class Sensor:
         headers = {"X-APIKEY": ROOM_KEY}
         with open(filename, 'rb') as f:
             post(DETECTION_URL, headers=headers, data={'time': now}, files={'image': f})
+    
+    def update_msg_id(self, msg_id):
+        self.message_id = msg_id
 
     def sync(self, data):
-        self.message_id = data.msg_id
+        self.update_msg_id(data.msg_id)
