@@ -4,14 +4,14 @@ APP_DIR=$(cd -P -- "$(dirname -- "$0")" && pwd -P)
 cd ${APP_DIR}
 echo "[+] Working in: $(pwd)"
 
-while getopts f:k OPTION; do
+while getopts f:k: OPTION; do
     case "${OPTION}" in
         f)
-        export CAMERA_FOLDER=${OPTARG}
+        export CAMERA_FOLDER="${OPTARG}"
         CAMERA_FOLDER_SET="yes"
         ;;
         k)
-        export ROOM_KEY=${OPTARG}
+        export ROOM_KEY="${OPTARG}"
         ROOM_KEY_SET="yes"
         ;;
     esac
@@ -32,7 +32,7 @@ if [[ -z "${CAMERA_FOLDER_SET}" ]]; then
     fi
 fi
 mkdir -p $(pwd)/${CAMERA_FOLDER}
-echo "[+] Camera Folder: " $(pwd)/${CAMERA_FOLDER}
+echo "[+] Camera Folder:" $(pwd)/${CAMERA_FOLDER}
 
 # Setup Room APIKEY
 if [[ -z "${ROOM_KEY_SET}" ]]; then
