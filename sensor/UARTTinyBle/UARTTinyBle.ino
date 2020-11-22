@@ -31,8 +31,7 @@ void setup()
   pinMode(door_pin, INPUT);
   digitalWrite(door_pin, HIGH);
   BLEsetup();
-  srand(time(NULL) + rand());
-  msg_id = rand();
+  generate_new_id();
 }
 
 void pack_header(uint8_t *sendBuffer, int action){
@@ -45,9 +44,13 @@ void pack_header(uint8_t *sendBuffer, int action){
   msg_id++;                                    // Increment Message ID
 }
 
+void generate_new_id(){
+  srand(time(NULL) + rand());
+  msg_id = rand();
+}
 void sync(){
   SerialMonitorInterface.println("Sync");
-  msg_id = rand();
+  generate_new_id();
   uint8_t sendBuffer[6];
   pack_header(sendBuffer, SYNC);
   if (!lib_aci_send_data(PIPE_UART_OVER_BTLE_UART_TX_TX, (uint8_t*)sendBuffer, 6))
