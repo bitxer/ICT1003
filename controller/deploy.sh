@@ -31,8 +31,8 @@ if [[ -z "${CAMERA_FOLDER_SET}" ]]; then
         export CAMERA_FOLDER=$(pwd)/camera
     fi
 fi
-mkdir -p $(pwd)/${CAMERA_FOLDER}
-echo "[+] Camera Folder:" $(pwd)/${CAMERA_FOLDER}
+mkdir -p ${CAMERA_FOLDER}
+echo "[+] Camera Folder:" ${CAMERA_FOLDER}
 
 # Setup Room APIKEY
 if [[ -z "${ROOM_KEY_SET}" ]]; then
