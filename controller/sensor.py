@@ -22,10 +22,9 @@ class Sensor:
         data -- bytearray, the data returned in the notification
         """
         data = Data.parse(data)
-        if data.msg_id != self.message_id and data.actref != SYNC:
+        if data.msg_id <= self.message_id and data.actref != SYNC:
             return
-        else:
-            self.update_msg_id(data.msg_id)
+        self.update_msg_id(data.msg_id)
         print(data)
         if data.actref == OPEN:
             self.detect()
