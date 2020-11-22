@@ -71,7 +71,7 @@ class Data():
 def detect():
     camera = PiCamera()
     now = str(int(datetime.now().timestamp()))
-    filename = path.join(config.CAMERA_FOLDER, now)
+    filename = path.join(config.CAMERA_FOLDER, now) + '.jpg'
     camera.capture(filename)
     # post(config.DETECTION_URL, headers={"X-APIKEY":config.ROOM_KEY})
 
@@ -97,4 +97,5 @@ def main():
         adapter.stop()
 
 if __name__ == '__main__':
-    main()
+    detect()
+    # main()

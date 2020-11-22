@@ -32,6 +32,7 @@ if [[ -z "${CAMERA_FOLDER_SET}" ]]; then
     fi
 fi
 mkdir -p $(pwd)/${CAMERA_FOLDER}
+echo "[+] Camera Folder: " $(pwd)/${CAMERA_FOLDER}
 
 # Setup Room APIKEY
 if [[ -z "${ROOM_KEY_SET}" ]]; then
