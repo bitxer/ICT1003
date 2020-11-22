@@ -16,6 +16,8 @@
                             <label for="roomName" class="col-form-label">Name:</label>
                             <input type="text" class="form-control" id="roomName">
                         </div>
+                        <!-- <p>Room is created. The API Key is <strong>sadanjdjasjad</strong></p>
+                        <i>API Key is only generated once please do not forget it.</i> -->
                     </div>
                 </div>
             </div>
@@ -29,15 +31,48 @@
 </div>
 <!-- Create Room Modal End -->
 
+<!-- API Key Display Modal Start -->
+<div class="modal fade" id="apiKeyDisplayModal" tabindex="-1" aria-labelledby="apiKeyDisplayModalLabel"
+    aria-hidden="true">
+    <div class="modal-dialog modal-dialog-centered">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h5 class="modal-title" id="apiKeyDisplayModalLabel">API Key</h5>
+                <button type="button" onclick="closeAPIKeyModal()" class="close" data-dismiss="modal"
+                    aria-label="Close">
+                    <span aria-hidden="true">&times;</span>
+                </button>
+                <div id="rowId" style="display: none;"></div>
+            </div>
+            <div class="modal-body">
+                <div class="container">
+                    <div class="row">
+                        <div class="col-sm-12">
+                            <p>Room is created. The API Key is: <strong id="apiKey"
+                                    style="word-wrap: break-word;"></strong></p>
+                            <i>API Key is only generated once please do not forget it.</i>
+                        </div>
+                    </div>
+                </div>
+            </div>
+            <div class="modal-footer">
+                <button type="button" onclick="closeAPIKeyModal()" class="btn btn-secondary"
+                    data-dismiss="modal">Close</button>
+            </div>
+        </div>
+    </div>
+</div>
+<!-- API Key Display Modal End -->
+
 <script defer>
     function createRoom() {
         // Get name of room the create.
         var roomName = document.getElementById("roomName").value;
 
-        // If successful, reload the page to see the changes.
         $.post("/room", { name: roomName })
-            .done(function (msg) {
-                location.reload();
+            .done(function (data) {
+                $("#apiKey").html(data.key);
+                $("#apiKeyDisplayModal").modal("show");
             })
             .fail(function (xhr, status, error) {
                 var alertItem = "<div class='alert alert-danger alert-dismissible fade show' role='alert'>";
@@ -47,5 +82,9 @@
                 var alert = $("#alert");
                 alert.append(alertItem);
             });
+    }
+
+    function closeAPIKeyModal() {
+        location.reload();
     }
 </script>
