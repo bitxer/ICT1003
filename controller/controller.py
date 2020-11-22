@@ -73,8 +73,9 @@ def detect():
     now = str(int(datetime.now().timestamp()))
     filename = path.join(config.CAMERA_FOLDER, now) + '.jpg'
     camera.capture(filename)
-    # post(config.DETECTION_URL, headers={"X-APIKEY":config.ROOM_KEY})
-
+    headers = {"X-APIKEY": config.ROOM_KEY}
+    with open(filename, 'rb') as f:
+        post(config.DETECTION_URL, headers=headers, data={'time': now}, files={'image': f})
 
 
 def process(_, data):
