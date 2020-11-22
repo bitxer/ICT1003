@@ -10,7 +10,7 @@ def main():
         adapter.start()
         for mac in ALLOWED_MAC:
             connected_sensors.append(Sensor(adapter, mac))
-        input("Press enter to continue.....")
+        input("Press enter to continue....\n")
     except KeyboardInterrupt:
         pass
     finally:

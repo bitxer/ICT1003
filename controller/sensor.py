@@ -25,7 +25,6 @@ class Sensor:
         if data.msg_id <= self.message_id and data.actref != SYNC:
             return
         self.update_msg_id(data.msg_id)
-        print(data)
         if data.actref == OPEN:
             self.detect()
         elif data.actref == CLOSE:
