@@ -66,6 +66,7 @@ int BLEsetup() {
     PRINTF("Error while adding UART service.\n");
   }
 
+  
   /* +4 dBm output power */
   ret = aci_hal_set_tx_power_level(1, 3);
 }
