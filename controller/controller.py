@@ -90,10 +90,11 @@ def main():
     adapter = pygatt.GATTToolBackend()
     try:
         adapter.start()
-        device = adapter.connect('c5:2d:cc:32:65:34')
-
-        device.subscribe("6e400003-b5a3-f393-e0a9-e50e24dcca9e",
-                        callback=process)
+        device = adapter.connect('c5:2d:cc:32:65:34', address_type=pygatt.BLEAddressType.random, auto_reconnect=True)
+        device.subscribe("6e400003-b5a3-f393-e0a9-e50e24dcca9e", callback=process)
+        input("Press enter to continue.....")
+    except KeyboardInterrupt:
+        pass
     finally:
         adapter.stop()
 
