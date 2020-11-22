@@ -11,6 +11,7 @@ import config
 class Data():
     '''Data object to be transmitted and recieved'''
     STRUCT_FORMAT = '>bbI14s'
+    HEADER_FORMAT = '>bbI'
     def __init__(self, actref, rsp, otp, ver=1, rev=1, data=None):
         try:
             self.len = len(data)
@@ -57,14 +58,22 @@ class Data():
         '''Parse data recieved using big endian'''
         if len(data) < 6:
             raise ValueError("Invalid data")
-        ver_rev, actref, rsp_len_otp, data = unpack(cls.STRUCT_FORMAT, data)
+        header = data[:6]
+        ver_rev, actref, rsp_len_otp = unpack(cls.HEADER_FORMAT, header)
         ver = (ver_rev & 0xF0) >> 4
         rev = ver_rev & 0x0F
 
         rsp = (rsp_len_otp & 0x80000000) >> 31
         clen = (rsp_len_otp & 0x7F000000) >> 24
         otp = rsp_len_otp & 0x00FFFFFF
-        data = data.decode()
+        try:
+            data = data[6:].decode()
+        except AttributeError:
+            return None
+        
+        if len(data) != clen:
+            return None
+            
         cls(actref, rsp, otp, ver=ver, rev=rev, data=data)
 
     def __str__(self):
