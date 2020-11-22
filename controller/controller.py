@@ -99,5 +99,4 @@ def main():
         adapter.stop()
 
 if __name__ == '__main__':
-    detect()
-    # main()
+    main()
