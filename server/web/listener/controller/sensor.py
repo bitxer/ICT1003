@@ -14,17 +14,16 @@ sensors = Blueprint("sensors", __name__)
 @sensors.route('/detection', methods=['POST'])
 def detection():
     apikey = request.headers.get('X-APIKEY')
+    dtime = request.form.get('time')
+    image = request.files.get('image')
+
+    if image is None or dtime is None or apikey is None:
+        return 'Missing field', 400
+
     room = get_room(apikey=apikey)
     if not room:
         return '', 403
 
-    
-    dtime = request.form.get('time')
-    image = request.files.get('image')
-
-    if image is None or dtime is None:
-        return 'Missing field', 400
-    
     try:
         dtime = int(dtime)
     except ValueError:
