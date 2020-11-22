@@ -67,6 +67,9 @@ class Data():
         data = data.decode()
         cls(actref, rsp, otp, ver=ver, rev=rev, data=data)
 
+    def __str__(self):
+        return f"<Data ver={self.ver} ref={self.actref} rsp={self.rsp} len={self.len} otp={self.otp} data={self.data}>"
+
 
 def detect():
     camera = PiCamera()
@@ -83,8 +86,8 @@ def process(_, data):
     _    -- integer, characteristic read handle the data was received on
     data -- bytearray, the data returned in the notification
     """
+    data = Data.parse(data)
     print(data)
-    # data = Data.parse(data)
 
 def main():
     adapter = pygatt.GATTToolBackend()
