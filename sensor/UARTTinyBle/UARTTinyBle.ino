@@ -45,6 +45,16 @@ void pack_header(uint8_t *sendBuffer, int action){
   msg_id++;                                    // Increment Message ID
 }
 
+void sync(){
+  SerialMonitorInterface.println("Sync");
+  msg_id = rand();
+  uint8_t sendBuffer[6];
+  pack_header(sendBuffer, SYNC);
+  if (!lib_aci_send_data(PIPE_UART_OVER_BTLE_UART_TX_TX, (uint8_t*)sendBuffer, 6))
+  {
+    SerialMonitorInterface.println(F("TX dropped!"));
+  }
+}
 
 void loop() {
   aci_loop();//Process any ACI commands or events from the NRF8001- main BLE handler, must run often. Keep main loop short.
@@ -65,9 +75,6 @@ void loop() {
         break;
       case 'c':
         pack_header(sendBuffer, CLOSE);
-        break;
-      case 's':
-        pack_header(sendBuffer, SYNC);
         break;
       default:
         return;

@@ -204,6 +204,8 @@ void GAP_ConnectionComplete_CB(uint8_t addr[6], uint16_t handle) {
     PRINTF("%02X-", addr[i]);
   }
   PRINTF("%02X\r\n", addr[0]);
+  delay(5000);
+  sync();
 }
 
 void GAP_DisconnectionComplete_CB(void) {
