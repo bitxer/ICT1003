@@ -31,7 +31,7 @@ def h_post_room():
     apikey = room.apikey
     result = room.add()
     if result:
-        return apikey, 200
+        return {"key": apikey}, 200
     elif isinstance(result, bool):
         return 'Room name cannot be duplicated', 400
     elif result is None:
