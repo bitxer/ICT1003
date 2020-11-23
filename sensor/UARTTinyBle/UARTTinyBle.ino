@@ -71,24 +71,16 @@ void loop() {
   if (SerialMonitorInterface.available()) {//Check if serial input is available to send
     delay(10);//should catch input
 
-//    uint8_t sendBuffer[6];
     char action = SerialMonitorInterface.read();
     switch (action){
       case 'o':
         trigger(OPEN);
-//        pack_header(sendBuffer, OPEN);
         break;
       case 'c':
         trigger(CLOSE);
-//        pack_header(sendBuffer, CLOSE);
         break;
       default:
         return;
     }
-    
-//    if (!lib_aci_send_data(PIPE_UART_OVER_BTLE_UART_TX_TX, (uint8_t*)sendBuffer, 6))
-//    {
-//      SerialMonitorInterface.println(F("TX dropped!"));
-//    }
   }
 }
