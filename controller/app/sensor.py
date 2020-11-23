@@ -37,6 +37,7 @@ class Sensor:
         filename = path.join(CAMERA_FOLDER, now) + '.jpg'
         try:
             camera = PiCamera()
+            camera.rotation = 180
             camera.capture(filename)
         except PiCameraMMALError:
             return
