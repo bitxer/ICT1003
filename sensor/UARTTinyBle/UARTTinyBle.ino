@@ -67,26 +67,4 @@ void loop() {
     trigger(CLOSE);
   }
   delay(1000);
-//  if (ble_rx_buffer_len) {//Check if data is available
-//    SerialMonitorInterface.print(ble_rx_buffer_len);
-//    SerialMonitorInterface.print(" : ");
-//    SerialMonitorInterface.println((char*)ble_rx_buffer);
-//    ble_rx_buffer_len = 0;//clear afer reading
-//  }
-//  if (SerialMonitorInterface.available()) {//Check if serial input is available to send
-  
-//    delay(10);//should catch input
-
-//    char action = SerialMonitorInterface.read();
-//    switch (action){
-//      case 'o':
-//        trigger(OPEN);
-//        break;
-//      case 'c':
-//        trigger(CLOSE);
-//        break;
-//      default:
-//        return;
-//    }
-//  }
 }
