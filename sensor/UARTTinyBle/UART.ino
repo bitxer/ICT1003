@@ -66,6 +66,7 @@ int BLEsetup() {
     PRINTF("Error while adding UART service.\n");
   }
 
+  
   /* +4 dBm output power */
   ret = aci_hal_set_tx_power_level(1, 3);
 }
@@ -203,6 +204,8 @@ void GAP_ConnectionComplete_CB(uint8_t addr[6], uint16_t handle) {
     PRINTF("%02X-", addr[i]);
   }
   PRINTF("%02X\r\n", addr[0]);
+  delay(5000);
+  trigger(SYNC);
 }
 
 void GAP_DisconnectionComplete_CB(void) {
