@@ -22,14 +22,13 @@ int msg_id = 0;
 #define PIPE_UART_OVER_BTLE_UART_TX_TX 0
 
 // DEFINITION FOR DOOR TRIGGERS.
-int door_pin = 3;
 
 void setup()
 {
   Serial.begin(9600);
   SerialMonitorInterface.begin(9600);
-  pinMode(door_pin, INPUT);
-  digitalWrite(door_pin, HIGH);
+  pinMode(DOOR_PIN, INPUT);
+  digitalWrite(DOOR_PIN, HIGH);
   BLEsetup();
   generate_new_id();
 }
@@ -62,25 +61,32 @@ void trigger(uint8_t evt){
 
 void loop() {
   aci_loop();//Process any ACI commands or events from the NRF8001- main BLE handler, must run often. Keep main loop short.
-  if (ble_rx_buffer_len) {//Check if data is available
-    SerialMonitorInterface.print(ble_rx_buffer_len);
-    SerialMonitorInterface.print(" : ");
-    SerialMonitorInterface.println((char*)ble_rx_buffer);
-    ble_rx_buffer_len = 0;//clear afer reading
+  if (!digitalRead(DOOR_PIN)) {
+    trigger(OPEN);
+  } else {
+    trigger(CLOSE);
   }
-  if (SerialMonitorInterface.available()) {//Check if serial input is available to send
-    delay(10);//should catch input
+  delay(1000);
+//  if (ble_rx_buffer_len) {//Check if data is available
+//    SerialMonitorInterface.print(ble_rx_buffer_len);
+//    SerialMonitorInterface.print(" : ");
+//    SerialMonitorInterface.println((char*)ble_rx_buffer);
+//    ble_rx_buffer_len = 0;//clear afer reading
+//  }
+//  if (SerialMonitorInterface.available()) {//Check if serial input is available to send
+  
+//    delay(10);//should catch input
 
-    char action = SerialMonitorInterface.read();
-    switch (action){
-      case 'o':
-        trigger(OPEN);
-        break;
-      case 'c':
-        trigger(CLOSE);
-        break;
-      default:
-        return;
-    }
-  }
+//    char action = SerialMonitorInterface.read();
+//    switch (action){
+//      case 'o':
+//        trigger(OPEN);
+//        break;
+//      case 'c':
+//        trigger(CLOSE);
+//        break;
+//      default:
+//        return;
+//    }
+//  }
 }

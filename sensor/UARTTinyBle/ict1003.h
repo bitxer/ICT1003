@@ -18,3 +18,4 @@
 
 #define MAXDATALEN 14
 #define LENOFFSET 2
+#define DOOR_PIN 3
