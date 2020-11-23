@@ -48,11 +48,12 @@ void generate_new_id(){
   srand(time(NULL) + rand());
   msg_id = rand();
 }
-void sync(){
-  SerialMonitorInterface.println("Sync");
-  generate_new_id();
+void trigger(uint8_t evt){
+  if (evt == SYNC){
+    generate_new_id();
+  }
   uint8_t sendBuffer[6];
-  pack_header(sendBuffer, SYNC);
+  pack_header(sendBuffer, evt);
   if (!lib_aci_send_data(PIPE_UART_OVER_BTLE_UART_TX_TX, (uint8_t*)sendBuffer, 6))
   {
     SerialMonitorInterface.println(F("TX dropped!"));
@@ -70,22 +71,24 @@ void loop() {
   if (SerialMonitorInterface.available()) {//Check if serial input is available to send
     delay(10);//should catch input
 
-    uint8_t sendBuffer[6];
+//    uint8_t sendBuffer[6];
     char action = SerialMonitorInterface.read();
     switch (action){
       case 'o':
-        pack_header(sendBuffer, OPEN);
+        trigger(OPEN);
+//        pack_header(sendBuffer, OPEN);
         break;
       case 'c':
-        pack_header(sendBuffer, CLOSE);
+        trigger(CLOSE);
+//        pack_header(sendBuffer, CLOSE);
         break;
       default:
         return;
     }
     
-    if (!lib_aci_send_data(PIPE_UART_OVER_BTLE_UART_TX_TX, (uint8_t*)sendBuffer, 6))
-    {
-      SerialMonitorInterface.println(F("TX dropped!"));
-    }
+//    if (!lib_aci_send_data(PIPE_UART_OVER_BTLE_UART_TX_TX, (uint8_t*)sendBuffer, 6))
+//    {
+//      SerialMonitorInterface.println(F("TX dropped!"));
+//    }
   }
 }
