@@ -18,10 +18,10 @@ uint8_t ble_rx_buffer[21];
 uint8_t ble_rx_buffer_len = 0;
 uint8_t ble_connection_state = false;
 int msg_id = 0;
+int door_open = 0;
 
 #define PIPE_UART_OVER_BTLE_UART_TX_TX 0
 
-// DEFINITION FOR DOOR TRIGGERS.
 
 void setup()
 {
@@ -31,6 +31,7 @@ void setup()
   digitalWrite(DOOR_PIN, HIGH);
   BLEsetup();
   generate_new_id();
+  door_open = is_open();
 }
 
 void pack_header(uint8_t *sendBuffer, int action){
@@ -47,24 +48,36 @@ void generate_new_id(){
   srand(time(NULL) + rand());
   msg_id = rand();
 }
+
+int is_open(){
+  int current = digitalRead(DOOR_PIN);
+  if (current == door_open) {
+    return -1;
+  }
+  door_open = current;
+  return current;
+}
+
 void trigger(uint8_t evt){
   if (evt == SYNC){
     generate_new_id();
   }
   uint8_t sendBuffer[6];
   pack_header(sendBuffer, evt);
-  if (!lib_aci_send_data(PIPE_UART_OVER_BTLE_UART_TX_TX, (uint8_t*)sendBuffer, 6))
-  {
-    SerialMonitorInterface.println(F("TX dropped!"));
-  }
+  lib_aci_send_data(PIPE_UART_OVER_BTLE_UART_TX_TX, (uint8_t*)sendBuffer, 6);
 }
 
 void loop() {
   aci_loop();//Process any ACI commands or events from the NRF8001- main BLE handler, must run often. Keep main loop short.
-  if (!digitalRead(DOOR_PIN)) {
+  int is_open_stat = is_open();
+  
+  if (is_open_stat == -1) {
+    return;
+  }
+  
+  if (!is_open_stat) {
     trigger(OPEN);
   } else {
     trigger(CLOSE);
   }
-  delay(1000);
 }
