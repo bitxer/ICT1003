@@ -1,5 +1,10 @@
 #!/bin/bash
 
+if [[ "${EUID}" -ne 0 ]]; then
+    echo "[!] Please run this script with root privileges."
+    exit 1
+fi
+
 APP_DIR=$(cd -P -- "$(dirname -- "$0")" && pwd -P)
 cd ${APP_DIR}
 echo "[+] Working in: $(pwd)"
@@ -50,7 +55,7 @@ if [[ ! -z "${RUN_ONLY_SET}" ]]; then
     # Run program
     echo "[*] Starting Controller..."
     cd app/
-    sudo python3 controller.py
+    python3 controller.py
 fi
 
 if [[ ! -z "${INSTALL_SET}" ]]; then
