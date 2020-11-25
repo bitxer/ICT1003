@@ -50,7 +50,7 @@ if [[ ! -z "${RUN_ONLY_SET}" ]]; then
     # Run program
     echo "[*] Starting Controller..."
     cd app/
-    python3 controller.py
+    sudo python3 controller.py
 fi
 
 if [[ ! -z "${INSTALL_SET}" ]]; then
