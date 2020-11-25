@@ -75,5 +75,6 @@ EOF
     sudo mv controller.service /lib/systemd/system/controller.service
     sudo systemctl daemon-reload
     sudo systemctl enable controller.service
+    sudo systemctl stop controller.service
     sudo systemctl start controller.service
 fi
