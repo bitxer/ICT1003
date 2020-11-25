@@ -1,3 +1,4 @@
+from time import sleep
 from pygatt import GATTToolBackend
 from pygatt.exceptions import NotConnectedError
 
@@ -14,7 +15,9 @@ def main():
                 connected_sensors.append(Sensor(adapter, mac))
             except NotConnectedError:
                 continue
-        input("Press enter to continue....\n")
+        print('Use CTRL-C to stop the current execution')
+        while True:
+            sleep(60 * 60 * 24)
     except (KeyboardInterrupt, EOFError):
         pass
     finally:
