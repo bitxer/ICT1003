@@ -4,7 +4,7 @@ APP_DIR=$(cd -P -- "$(dirname -- "$0")" && pwd -P)
 cd ${APP_DIR}
 echo "[+] Working in: $(pwd)"
 
-while getopts f:k: OPTION; do
+while getopts f:k:ri OPTION; do
     case "${OPTION}" in
         f)
         export CAMERA_FOLDER=$(pwd)/"${OPTARG}"
@@ -13,6 +13,12 @@ while getopts f:k: OPTION; do
         k)
         export ROOM_KEY="${OPTARG}"
         ROOM_KEY_SET="yes"
+        ;;
+        r)
+        export RUN_ONLY_SET="yes"
+        ;;
+        i)
+        export INSTALL_SET="yes"
         ;;
     esac
 done
@@ -40,7 +46,27 @@ if [[ -z "${ROOM_KEY_SET}" ]]; then
     export ROOM_KEY=${ROOM_KEY_IN}
 fi
 
-# Run program
-echo "[*] Starting Controller..."
-cd app/
-python3 controller.py
+if [[ -z "${RUN_ONLY_SET}" ]]; then
+    # Run program
+    echo "[*] Starting Controller..."
+    cd app/
+    python3 controller.py
+fi
+
+if [[ -z "${INSTALL_SET}" ]]; then
+    cat << EOF > controller.service
+[Unit]
+Description=Controller Service
+After=multi-user.target
+
+[Service]
+Type=idle
+WorkingDirectory=${pwd}/app
+Environment=CAMERA_FOLDER=${CAMERA_FOLDER}
+Environment=ROOM_KEY=${ROOM_KEY}
+ExecStart=/usr/bin/python3 controller.py
+
+[Install]
+WantedBy=multi-user.target
+EOF
+fi
