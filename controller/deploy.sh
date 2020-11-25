@@ -59,7 +59,7 @@ if [[ ! -z "${RUN_ONLY_SET}" ]]; then
 fi
 
 if [[ ! -z "${INSTALL_SET}" ]]; then
-    sudo pip3 install -r requirements.txt
+    pip3 install -r requirements.txt
     cat << EOF > controller.service
 [Unit]
 Description=Controller Service
@@ -77,9 +77,9 @@ ExecStop=/bin/kill -SIGINT \$MAINPID
 [Install]
 WantedBy=multi-user.target
 EOF
-    sudo mv controller.service /lib/systemd/system/controller.service
-    sudo systemctl daemon-reload
-    sudo systemctl enable controller.service
-    sudo systemctl stop controller.service
-    sudo systemctl start controller.service
+    mv controller.service /lib/systemd/system/controller.service
+    systemctl daemon-reload
+    systemctl enable controller.service
+    systemctl stop controller.service
+    systemctl start controller.service
 fi
