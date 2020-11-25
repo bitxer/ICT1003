@@ -18,7 +18,7 @@ def main():
         print('Use CTRL-C to stop the current execution')
         while True:
             sleep(60 * 60 * 24)
-    except (KeyboardInterrupt, EOFError):
+    except KeyboardInterrupt:
         pass
     finally:
         adapter.stop()
