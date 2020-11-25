@@ -11,7 +11,7 @@ def main():
     adapter = GATTToolBackend()
     # Scan surroundings
     for device in adapter.scan():
-        if device['address'] in ALLOWED_MAC:
+        if device['address'].lower() in ALLOWED_MAC:
             available_sensors.append(device['address'])
     try:
         adapter.start()
