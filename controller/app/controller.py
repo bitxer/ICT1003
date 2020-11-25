@@ -6,11 +6,16 @@ from config import ALLOWED_MAC
 from sensor import Sensor
 
 def main():
+    available_sensors = []
     connected_sensors = []
     adapter = GATTToolBackend()
+    # Scan surroundings
+    for device in adapter.scan():
+        if device['address'] in ALLOWED_MAC:
+            available_sensors.append(device['address'])
     try:
         adapter.start()
-        for mac in ALLOWED_MAC:
+        for mac in available_sensors:
             try:
                 connected_sensors.append(Sensor(adapter, mac))
             except NotConnectedError:
