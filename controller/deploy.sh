@@ -46,14 +46,14 @@ if [[ -z "${ROOM_KEY_SET}" ]]; then
     export ROOM_KEY=${ROOM_KEY_IN}
 fi
 
-if [[ -z "${RUN_ONLY_SET}" ]]; then
+if [[ ! -z "${RUN_ONLY_SET}" ]]; then
     # Run program
     echo "[*] Starting Controller..."
     cd app/
     python3 controller.py
 fi
 
-if [[ -z "${INSTALL_SET}" ]]; then
+if [[ ! -z "${INSTALL_SET}" ]]; then
     cat << EOF > controller.service
 [Unit]
 Description=Controller Service
