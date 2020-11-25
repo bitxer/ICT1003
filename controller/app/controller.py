@@ -15,7 +15,7 @@ def main():
             except NotConnectedError:
                 continue
         input("Press enter to continue....\n")
-    except KeyboardInterrupt:
+    except (KeyboardInterrupt, EOFError):
         pass
     finally:
         adapter.stop()
