@@ -62,9 +62,11 @@ After=multi-user.target
 [Service]
 Type=idle
 WorkingDirectory=${pwd}/app
+PIDFile=${pwd}/app/controller.pid
 Environment=CAMERA_FOLDER=${CAMERA_FOLDER}
 Environment=ROOM_KEY=${ROOM_KEY}
 ExecStart=/usr/bin/python3 controller.py
+ExecStop=/bin/kill -TERM $MAINPID
 
 [Install]
 WantedBy=multi-user.target
