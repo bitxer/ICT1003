@@ -5,6 +5,8 @@ services:
     build:
       context: web
       dockerfile: Dockerfile
+      args:
+        TZ: ${TZ}
     restart: always
     privileged: false
     cap_drop:
