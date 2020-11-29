@@ -55,7 +55,7 @@ services:
       - internal_net
 
   rabbit:
-    image: rabbitmq:3.8-management-alpine
+    image: rabbitmq:3.8-alpine
     restart: always
     privileged: false
     cap_drop:
