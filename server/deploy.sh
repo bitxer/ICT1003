@@ -105,3 +105,4 @@ fi
 # Run docker-compose.
 echo "[*] Starting containers..."
 docker-compose --project-name "${APP_NAME}" up -d
+docker image prune -af
