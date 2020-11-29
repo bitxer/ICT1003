@@ -9,7 +9,7 @@ COPY ./requirements.txt /opt/web/requirements.txt
 
 RUN rm -rf /var/cache/apk/* /tmp/* && \
     apk update && apk upgrade && \
-    apk add python3-dev libffi-dev gcc musl-dev make libmagic postgresql-dev --no-cache && \
+    apk add python3-dev libffi-dev gcc musl-dev make libmagic postgresql-dev tzdata --no-cache && \
     pip install --no-cache-dir --upgrade pip && \
     pip install --no-cache-dir -r /opt/web/requirements.txt
 
